@@ -15,6 +15,14 @@ namespace MyGardenFriend.Assembly
     {
         public AssemblyWorkbench workbench;
 
+        private void Start()
+        {
+            if (workbench == null)
+            {
+                workbench = FindObjectOfType<AssemblyWorkbench>();
+            }
+        }
+
         public ViabilityState EvaluateViability(out float survivalTimer)
         {
             survivalTimer = -1f; // -1 means infinite/stable

@@ -55,5 +55,30 @@ namespace MyGardenFriend.Core
                 SetPhase(GamePhase.Farming);
             }
         }
+
+        // Simple UI Hooks
+        public void AttemptRevive()
+        {
+            var lifecycle = FindObjectOfType<MyGardenFriend.Assembly.FriendLifeCycle>();
+            if (lifecycle != null)
+            {
+                lifecycle.AttemptBirth();
+            }
+        }
+
+        public void PlantSelectedSeed(MyGardenFriend.Farming.BioCropData cropData)
+        {
+            var controller = FindObjectOfType<MyGardenFriend.Farming.GardenPlotController>();
+            if (controller != null && controller.Grid != null)
+            {
+                foreach(var tile in controller.Grid)
+                {
+                    if (tile.PlantSeed(cropData))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

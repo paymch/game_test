@@ -11,6 +11,14 @@ namespace MyGardenFriend.Farming
 
         private float timer = 0f;
 
+        private void Start()
+        {
+            if (gardenController == null)
+            {
+                gardenController = FindObjectOfType<GardenPlotController>();
+            }
+        }
+
         private void Update()
         {
             if (gardenController == null || gardenController.Grid == null) return;
@@ -27,7 +35,9 @@ namespace MyGardenFriend.Farming
         {
             int width = gardenController.gridWidth;
             int height = gardenController.gridHeight;
-            PlotTile[,] grid = gardenController.Grid;
+            PlotTile[] grid = gardenController.Grid;
+
+            if (grid == null) return;
 
             // We need a list of new infections so we don't spread newly infected tiles in the same tick
             List<PlotTile> tilesToInfect = new List<PlotTile>();
@@ -37,7 +47,10 @@ namespace MyGardenFriend.Farming
             {
                 for (int y = 0; y < height; y++)
                 {
-                    PlotTile tile = grid[x, y];
+                    int idx = x + y * width;
+                    if (idx >= grid.Length) continue;
+
+                    PlotTile tile = grid[idx];
                     if (tile != null && tile.CurrentPathogen != PathogenType.None)
                     {
                         List<PlotTile> neighbors = gardenController.GetNeighbors(x, y);

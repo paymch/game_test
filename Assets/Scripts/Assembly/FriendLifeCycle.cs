@@ -14,6 +14,14 @@ namespace MyGardenFriend.Assembly
         public event Action OnFriendDied;
         public event Action<ViabilityState> OnFriendBorn;
 
+        private void Start()
+        {
+            if (evaluator == null)
+            {
+                evaluator = FindObjectOfType<CreatureViabilityEvaluator>();
+            }
+        }
+
         public void AttemptBirth()
         {
             if (evaluator == null) return;

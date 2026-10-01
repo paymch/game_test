@@ -8,33 +8,23 @@ namespace MyGardenFriend.Farming
         public int gridWidth = 5;
         public int gridHeight = 5;
         public float tileSize = 1.0f;
-        public GameObject plotTilePrefab;
 
-        private PlotTile[,] grid;
-        public PlotTile[,] Grid => grid;
+        private PlotTile[] gridList;
+        public PlotTile[] Grid => gridList;
 
         private void Start()
         {
-            GenerateGrid();
+            InitializeGrid();
         }
 
-        private void GenerateGrid()
+        private void InitializeGrid()
         {
-            grid = new PlotTile[gridWidth, gridHeight];
-
-            for (int x = 0; x < gridWidth; x++)
+            gridList = GetComponentsInChildren<PlotTile>();
+            int i = 0;
+            foreach (var tile in gridList)
             {
-                for (int y = 0; y < gridHeight; y++)
-                {
-                    Vector3 position = new Vector3(x * tileSize, 0, y * tileSize) + transform.position;
-                    GameObject tileObj = Instantiate(plotTilePrefab, position, Quaternion.identity, transform);
-                    PlotTile tile = tileObj.GetComponent<PlotTile>();
-                    if (tile != null)
-                    {
-                        tile.Initialize(this, x, y);
-                        grid[x, y] = tile;
-                    }
-                }
+                tile.Initialize(this, i % gridWidth, i / gridWidth);
+                i++;
             }
         }
 
@@ -42,10 +32,28 @@ namespace MyGardenFriend.Farming
         {
             List<PlotTile> neighbors = new List<PlotTile>();
 
-            if (x > 0) neighbors.Add(grid[x - 1, y]);
-            if (x < gridWidth - 1) neighbors.Add(grid[x + 1, y]);
-            if (y > 0) neighbors.Add(grid[x, y - 1]);
-            if (y < gridHeight - 1) neighbors.Add(grid[x, y + 1]);
+            if (gridList == null) return neighbors;
+
+            if (x > 0)
+            {
+                int idx = (x - 1) + y * gridWidth;
+                if(idx >= 0 && idx < gridList.Length) neighbors.Add(gridList[idx]);
+            }
+            if (x < gridWidth - 1)
+            {
+                int idx = (x + 1) + y * gridWidth;
+                if(idx >= 0 && idx < gridList.Length) neighbors.Add(gridList[idx]);
+            }
+            if (y > 0)
+            {
+                int idx = x + (y - 1) * gridWidth;
+                if(idx >= 0 && idx < gridList.Length) neighbors.Add(gridList[idx]);
+            }
+            if (y < gridHeight - 1)
+            {
+                int idx = x + (y + 1) * gridWidth;
+                if(idx >= 0 && idx < gridList.Length) neighbors.Add(gridList[idx]);
+            }
 
             return neighbors;
         }

@@ -140,6 +140,25 @@ namespace MyGardenFriend.Farming
              UpdateVisuals();
         }
 
+        private void OnMouseDown()
+        {
+            if (CurrentStage == GrowthStage.Harvestable || CurrentStage == GrowthStage.Spoiled)
+            {
+                Harvest();
+            }
+            else if (CurrentStage == GrowthStage.Empty)
+            {
+                // Fallback for click-to-plant directly
+                BioCropData testCrop = ScriptableObject.CreateInstance<BioCropData>();
+                testCrop.waterRequirementType = FluidType.Blood;
+                testCrop.cropType = BioCropType.Eyes;
+                testCrop.growthTime = 3f;
+                testCrop.yieldAmount = 1;
+                testCrop.spoilTime = 10f;
+                PlantSeed(testCrop);
+            }
+        }
+
         private void UpdateVisuals()
         {
             // Update Sprite based on GrowthStage

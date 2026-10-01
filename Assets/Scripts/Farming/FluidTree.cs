@@ -31,5 +31,11 @@ namespace MyGardenFriend.Farming
                 ResourceManager.Instance.AddFluid(producedFluid, generationRate);
             }
         }
+
+        private void OnMouseDown()
+        {
+            // Tapping tree to extract faster manually
+            GenerateFluid();
+        }
     }
 }
