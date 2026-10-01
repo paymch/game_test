@@ -13,6 +13,9 @@ namespace MyGardenFriend.Assembly
         // This could hold data about the specific part's quality/health later
         public bool IsDefective { get; private set; }
 
+        public SpriteRenderer partRenderer;
+        public Sprite defaultPartSprite;
+
         public bool TrySlotPart(BioCropType partType, bool defective = false)
         {
             if (!IsFilled && partType == acceptedPartType)
@@ -34,7 +37,19 @@ namespace MyGardenFriend.Assembly
 
         private void UpdateVisuals()
         {
-            // Placeholder: Show/hide child mesh or change color
+            if (partRenderer != null)
+            {
+                partRenderer.sprite = IsFilled ? defaultPartSprite : null;
+            }
+
+            if (IsFilled)
+            {
+                var limb = GetComponent<MyGardenFriend.Visuals.CutoutPuppetLimb>();
+                if (limb != null)
+                {
+                    limb.PlaySlottedReaction();
+                }
+            }
         }
     }
 }

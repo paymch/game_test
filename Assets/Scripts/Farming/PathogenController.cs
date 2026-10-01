@@ -45,7 +45,7 @@ namespace MyGardenFriend.Farming
                         {
                             if (neighbor.CurrentStage != GrowthStage.Empty && neighbor.CurrentPathogen == PathogenType.None)
                             {
-                                if (Random.value <= infectionChance)
+                                if (Random.value <= infectionChance && !tilesToInfect.Contains(neighbor))
                                 {
                                     tilesToInfect.Add(neighbor);
                                     pathogensToSpread.Add(tile.CurrentPathogen);
@@ -58,7 +58,7 @@ namespace MyGardenFriend.Farming
 
             for (int i = 0; i < tilesToInfect.Count; i++)
             {
-                tilesToInfect[i].CurrentPathogen = pathogensToSpread[i];
+                tilesToInfect[i].Infect(pathogensToSpread[i]);
             }
         }
     }

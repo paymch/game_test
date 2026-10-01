@@ -33,5 +33,8 @@ namespace MyGardenFriend.Farming
         [Header("Harvest Parameters")]
         public int yieldAmount; // Amount of items yielded
         public float spoilTime; // Time in seconds before it spoils after fully grown
+
+        [Header("Visuals")]
+        public Sprite[] growthStageSprites; // Sprites for each growth stage
     }
 }

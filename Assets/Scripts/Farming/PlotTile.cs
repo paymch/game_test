@@ -134,9 +134,31 @@ namespace MyGardenFriend.Farming
              UpdateVisuals();
         }
 
+        public void Infect(PathogenType pathogen)
+        {
+             CurrentPathogen = pathogen;
+             UpdateVisuals();
+        }
+
         private void UpdateVisuals()
         {
-            // Placeholder: Change color or enable/disable child meshes based on CurrentStage and CurrentPathogen
+            // Update Sprite based on GrowthStage
+            var renderer = GetComponent<SpriteRenderer>();
+            if (renderer != null && CurrentCropData != null && CurrentCropData.growthStageSprites != null)
+            {
+                int stageIndex = (int)CurrentStage;
+                if (stageIndex >= 0 && stageIndex < CurrentCropData.growthStageSprites.Length)
+                {
+                    renderer.sprite = CurrentCropData.growthStageSprites[stageIndex];
+                }
+            }
+
+            // Update InfectionVisualOverlay if present
+            var overlay = GetComponent<MyGardenFriend.Visuals.InfectionVisualOverlay>();
+            if (overlay != null)
+            {
+                overlay.UpdateOverlay(CurrentPathogen);
+            }
         }
     }
 }

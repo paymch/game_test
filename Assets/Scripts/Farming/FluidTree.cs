@@ -9,6 +9,9 @@ namespace MyGardenFriend.Farming
         public float generationRate = 5f; // Amount per tick
         public float tickInterval = 2f; // Seconds between ticks
 
+        public SpriteRenderer treeRenderer;
+        public SpriteRenderer flaskRenderer;
+
         private float timer = 0f;
 
         private void Update()
