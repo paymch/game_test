@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой огородный друг</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top HUD -->
+    <header id="hud">
+        <div class="fluid-gauge blood">Blood: <span id="blood-count">0</span></div>
+        <div class="fluid-gauge sweat">Sweat: <span id="sweat-count">0</span></div>
+        <div class="fluid-gauge urine">Urine: <span id="urine-count">0</span></div>
+    </header>
+
+    <div id="game-container">
+        <!-- Left Zone: The Garden -->
+        <section id="garden-zone">
+            <div id="fluid-trees">
+                <button class="fluid-btn blood-tree" data-type="blood">Tap Blood Tree</button>
+                <button class="fluid-btn sweat-tree" data-type="sweat">Tap Sweat Tree</button>
+                <button class="fluid-btn urine-tree" data-type="urine">Tap Urine Tree</button>
+            </div>
+
+            <div id="bio-grid">
+                <!-- Grid cells will be generated here by gardenSystem.js -->
+            </div>
+        </section>
+
+        <!-- Right Zone: Assembly Table -->
+        <section id="assembly-zone">
+            <div id="operating-table">
+                <!-- Mannequin layout -->
+                <div class="socket head" id="socket-head" data-type="head">HEAD</div>
+                <div class="socket chest" id="socket-chest" data-type="chest">CHEST</div>
+                <div class="socket arm-l" id="socket-arm-l" data-type="arm_l">L ARM</div>
+                <div class="socket arm-r" id="socket-arm-r" data-type="arm_r">R ARM</div>
+                <div class="socket leg-l" id="socket-leg-l" data-type="leg_l">L LEG</div>
+                <div class="socket leg-r" id="socket-leg-r" data-type="leg_r">R LEG</div>
+            </div>
+
+            <div id="status-box">
+                <h2>Creature Status</h2>
+                <div id="viability-status">DORMANT</div>
+                <div id="countdown-timer"></div>
+                <button id="animate-btn">ANIMATE CREATURE</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom Toolbelt -->
+    <footer id="toolbelt">
+        <div id="seed-selection">
+            <h3>Seeds:</h3>
+            <button class="seed-btn" data-seed="eye">Plant Eyeball</button>
+            <button class="seed-btn" data-seed="hair">Plant Hair</button>
+            <button class="seed-btn" data-seed="finger">Plant Finger</button>
+        </div>
+        <div id="inventory-panel">
+            <h3>Inventory:</h3>
+            <ul id="inventory-list">
+                <!-- Harvested items will appear here -->
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

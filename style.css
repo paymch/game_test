@@ -1,0 +1,250 @@
+:root {
+    --bg-color: #121214;
+    --text-color: #e0e0e0;
+    --panel-bg: #1e1e24;
+    --border-color: #333;
+
+    --blood-color: #8a0303;
+    --sweat-color: #00e5ff;
+    --urine-color: #d4af37;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Typography and common */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 10px;
+    margin: 5px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+button.selected {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Top HUD */
+#hud {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--panel-bg);
+    padding: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.fluid-gauge {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.blood { border: 2px solid var(--blood-color); color: var(--blood-color); }
+.sweat { border: 2px solid var(--sweat-color); color: var(--sweat-color); }
+.urine { border: 2px solid var(--urine-color); color: var(--urine-color); }
+
+/* Main Split Screen */
+#game-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Left Zone: Garden */
+#garden-zone {
+    flex: 1;
+    padding: 20px;
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#fluid-trees {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.blood-tree { background-color: #4a0202; }
+.sweat-tree { background-color: #005a66; }
+.urine-tree { background-color: #665400; }
+
+#bio-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+    gap: 10px;
+    background-color: #0a0a0c;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.grid-cell {
+    background-color: #2a2a2a;
+    border: 1px dashed #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.grid-cell:hover {
+    border-color: #888;
+}
+
+/* Procedural Canvas overrides */
+.grid-cell canvas {
+    pointer-events: none;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Right Zone: Assembly */
+#assembly-zone {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#operating-table {
+    width: 300px;
+    height: 400px;
+    background-color: #2a2a30;
+    border-radius: 20px;
+    position: relative;
+    border: 2px solid #444;
+}
+
+.socket {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px dashed #666;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.socket.selected {
+    border-color: #fff;
+    color: #fff;
+}
+
+.socket.filled {
+    border-style: solid;
+    border-color: #0f0;
+}
+
+/* Socket positioning */
+.head { top: 20px; left: 120px; }
+.chest { top: 100px; left: 120px; width: 60px; height: 100px;}
+.arm-l { top: 100px; left: 40px; }
+.arm-r { top: 100px; left: 200px; }
+.leg-l { top: 220px; left: 100px; }
+.leg-r { top: 220px; left: 180px; }
+
+
+#status-box {
+    margin-top: auto;
+    background-color: var(--panel-bg);
+    padding: 20px;
+    border: 2px solid var(--border-color);
+    text-align: center;
+    width: 80%;
+}
+
+#viability-status {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #aaa;
+}
+
+#countdown-timer {
+    color: red;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5em;
+}
+
+#animate-btn {
+    background-color: #0f0;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 100%;
+}
+
+#animate-btn:hover {
+    background-color: #5f5;
+}
+
+/* Bottom Toolbelt */
+#toolbelt {
+    display: flex;
+    background-color: var(--panel-bg);
+    padding: 15px;
+    border-top: 2px solid var(--border-color);
+    height: 150px;
+}
+
+#seed-selection {
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    padding-right: 10px;
+}
+
+#inventory-panel {
+    flex: 1;
+    padding-left: 20px;
+    overflow-y: auto;
+}
+
+#inventory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inv-item {
+    background-color: #333;
+    padding: 5px 10px;
+    border: 1px solid #777;
+    cursor: pointer;
+    user-select: none;
+}
+
+.inv-item.selected {
+    background-color: #fff;
+    color: #000;
+}
