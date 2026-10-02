@@ -78,7 +78,8 @@ namespace MyGardenFriend.Tests
             testCrop.growthTime = 0.1f;
             testCrop.yieldAmount = 1;
 
-            GameManager.Instance.PlantSelectedSeed(testCrop);
+            GameManager.Instance.SelectedSeed = testCrop;
+            targetTile.SendMessage("OnMouseDown"); // Trigger click to plant
             yield return null;
             Assert.AreEqual(GrowthStage.Seed, targetTile.CurrentStage, "Planting failed");
 

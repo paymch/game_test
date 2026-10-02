@@ -19,6 +19,7 @@ namespace MyGardenFriend.Core
             if (Instance == null)
             {
                 Instance = this;
+                transform.SetParent(null);
                 DontDestroyOnLoad(gameObject);
                 InitializeResources();
             }

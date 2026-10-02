@@ -8,7 +8,7 @@ namespace MyGardenFriend.Editor.AssetGenerators
     {
         void OnPreprocessTexture()
         {
-            if (assetPath.StartsWith("Assets/Art/Textures/"))
+            if (assetPath.StartsWith("Assets/Art/Textures/") || assetPath.StartsWith("Assets/Resources/"))
             {
                 TextureImporter textureImporter = (TextureImporter)assetImporter;
 

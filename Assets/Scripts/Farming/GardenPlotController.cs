@@ -19,12 +19,34 @@ namespace MyGardenFriend.Farming
 
         private void InitializeGrid()
         {
-            gridList = GetComponentsInChildren<PlotTile>();
-            int i = 0;
-            foreach (var tile in gridList)
+            gridList = new PlotTile[gridWidth * gridHeight];
+
+            for (int y = 0; y < gridHeight; y++)
             {
-                tile.Initialize(this, i % gridWidth, i / gridWidth);
-                i++;
+                for (int x = 0; x < gridWidth; x++)
+                {
+                    int i = x + y * gridWidth;
+
+                    GameObject tileObj = new GameObject($"PlotTile_{x}_{y}");
+                    tileObj.transform.parent = this.transform;
+                    tileObj.transform.localPosition = new Vector3(x * tileSize, y * tileSize, 0);
+
+                    // Add visuals and physics
+                    SpriteRenderer sr = tileObj.AddComponent<SpriteRenderer>();
+                    sr.sortingOrder = 0;
+                    if (MyGardenFriend.Visuals.RuntimeTextureGenerator.Instance != null)
+                    {
+                        sr.sprite = MyGardenFriend.Visuals.RuntimeTextureGenerator.Instance.GetSprite("SoilBed");
+                    }
+
+                    BoxCollider2D col = tileObj.AddComponent<BoxCollider2D>();
+                    col.size = new Vector2(tileSize, tileSize);
+
+                    PlotTile tile = tileObj.AddComponent<PlotTile>();
+                    tile.Initialize(this, x, y);
+
+                    gridList[i] = tile;
+                }
             }
         }
 

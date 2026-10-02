@@ -22,6 +22,7 @@ namespace MyGardenFriend.Core
             if (Instance == null)
             {
                 Instance = this;
+                transform.SetParent(null);
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -56,6 +57,42 @@ namespace MyGardenFriend.Core
             }
         }
 
+        [Header("UI References - Runtime Only since no real UI lib")]
+        public string HUD_Text;
+        public string Inventory_Text;
+        public string Status_Text;
+
+        public Farming.BioCropData SelectedSeed { get; set; }
+
+        private void Update()
+        {
+            if (ResourceManager.Instance != null)
+            {
+                HUD_Text = $"Blood: {ResourceManager.Instance.GetFluidAmount(Farming.FluidType.Blood):F0} | Sweat: {ResourceManager.Instance.GetFluidAmount(Farming.FluidType.Sweat):F0} | Urine: {ResourceManager.Instance.GetFluidAmount(Farming.FluidType.Urine):F0}";
+
+                string inv = "Inventory: ";
+                foreach (Farming.BioCropType type in Enum.GetValues(typeof(Farming.BioCropType)))
+                {
+                    int amt = ResourceManager.Instance.GetBodyPartAmount(type);
+                    if (amt > 0) inv += $"{type}:{amt} ";
+                }
+                Inventory_Text = inv;
+            }
+
+            var lifecycle = FindObjectOfType<MyGardenFriend.Assembly.FriendLifeCycle>();
+            if (lifecycle != null)
+            {
+                if (lifecycle.IsAlive)
+                {
+                    Status_Text = $"State: {lifecycle.CurrentState} | Time: {(lifecycle.RemainingLifeTime < 0 ? "Infinite" : lifecycle.RemainingLifeTime.ToString("F1"))}";
+                }
+                else
+                {
+                    Status_Text = "Dead / Not Born";
+                }
+            }
+        }
+
         // Simple UI Hooks
         public void AttemptRevive()
         {
@@ -66,19 +103,5 @@ namespace MyGardenFriend.Core
             }
         }
 
-        public void PlantSelectedSeed(MyGardenFriend.Farming.BioCropData cropData)
-        {
-            var controller = FindObjectOfType<MyGardenFriend.Farming.GardenPlotController>();
-            if (controller != null && controller.Grid != null)
-            {
-                foreach(var tile in controller.Grid)
-                {
-                    if (tile.PlantSeed(cropData))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
     }
 }

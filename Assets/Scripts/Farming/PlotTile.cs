@@ -35,6 +35,9 @@ namespace MyGardenFriend.Farming
         private float growthTimer = 0f;
         private float spoilTimer = 0f;
 
+        private GameObject cropChild;
+        private SpriteRenderer cropRenderer;
+
         public void Initialize(GardenPlotController controller, int x, int y)
         {
             Controller = controller;
@@ -52,6 +55,16 @@ namespace MyGardenFriend.Farming
                 CurrentStage = GrowthStage.Seed;
                 growthTimer = 0f;
                 spoilTimer = 0f;
+
+                if (cropChild == null)
+                {
+                    cropChild = new GameObject("CropSprite");
+                    cropChild.transform.parent = this.transform;
+                    cropChild.transform.localPosition = Vector3.zero;
+                    cropRenderer = cropChild.AddComponent<SpriteRenderer>();
+                    cropRenderer.sortingOrder = 5;
+                }
+
                 UpdateVisuals();
                 return true;
             }
@@ -72,6 +85,15 @@ namespace MyGardenFriend.Farming
                 }
 
                 growthTimer += Time.deltaTime * growthMultiplier;
+
+                // Crop Growth Animation (Scale up based on growth progress)
+                if (cropChild != null && CurrentCropData != null && CurrentCropData.growthTime > 0)
+                {
+                    float progress = Mathf.Clamp01(growthTimer / CurrentCropData.growthTime);
+                    // Start small, grow to full scale
+                    float scale = Mathf.Lerp(0.2f, 1.0f, progress);
+                    cropChild.transform.localScale = new Vector3(scale, scale, scale);
+                }
 
                 if (growthTimer >= CurrentCropData.growthTime)
                 {
@@ -125,6 +147,12 @@ namespace MyGardenFriend.Farming
             CurrentStage = GrowthStage.Empty;
             CurrentCropData = null;
             CurrentPathogen = PathogenType.None;
+            if (cropChild != null)
+            {
+                Destroy(cropChild);
+                cropChild = null;
+                cropRenderer = null;
+            }
             UpdateVisuals();
         }
 
@@ -148,27 +176,25 @@ namespace MyGardenFriend.Farming
             }
             else if (CurrentStage == GrowthStage.Empty)
             {
-                // Fallback for click-to-plant directly
-                BioCropData testCrop = ScriptableObject.CreateInstance<BioCropData>();
-                testCrop.waterRequirementType = FluidType.Blood;
-                testCrop.cropType = BioCropType.Eyes;
-                testCrop.growthTime = 3f;
-                testCrop.yieldAmount = 1;
-                testCrop.spoilTime = 10f;
-                PlantSeed(testCrop);
+                var gm = GameManager.Instance;
+                if (gm == null) gm = FindObjectOfType<GameManager>();
+
+                if (gm != null && gm.SelectedSeed != null)
+                {
+                    PlantSeed(gm.SelectedSeed);
+                }
             }
         }
 
         private void UpdateVisuals()
         {
             // Update Sprite based on GrowthStage
-            var renderer = GetComponent<SpriteRenderer>();
-            if (renderer != null && CurrentCropData != null && CurrentCropData.growthStageSprites != null)
+            if (cropRenderer != null && CurrentCropData != null && CurrentCropData.growthStageSprites != null)
             {
                 int stageIndex = (int)CurrentStage;
                 if (stageIndex >= 0 && stageIndex < CurrentCropData.growthStageSprites.Length)
                 {
-                    renderer.sprite = CurrentCropData.growthStageSprites[stageIndex];
+                    cropRenderer.sprite = CurrentCropData.growthStageSprites[stageIndex];
                 }
             }
 
